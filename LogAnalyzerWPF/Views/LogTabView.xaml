@@ -1,0 +1,50 @@
+<UserControl x:Class="LogAnalyzerWPF.Views.LogTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="#1E1E1E">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" x:Name="ChartContainer" Background="#252526" BorderBrush="#333" BorderThickness="0,0,0,1" Visibility="Collapsed">
+            <!-- Dynamic Chart Injected Here -->
+        </Border>
+
+        <DataGrid Grid.Row="1" x:Name="LogDataGrid" AutoGenerateColumns="False" 
+                  Background="#1E1E1E" RowBackground="#1E1E1E" 
+                  AlternatingRowBackground="#252526" Foreground="#D4D4D4" 
+                  IsReadOnly="True" GridLinesVisibility="Horizontal" 
+                  HorizontalGridLinesBrush="#3E3E42" HeadersVisibility="Column"
+                  PreviewKeyDown="LogDataGrid_PreviewKeyDown">
+            <DataGrid.Resources>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="Background" Value="#333333"/>
+                    <Setter Property="Foreground" Value="#D4D4D4"/>
+                    <Setter Property="Padding" Value="5,5,5,5"/>
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="Background" Value="{Binding BackgroundColor}" />
+                    <Setter Property="Foreground" Value="#D4D4D4" />
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="★" Binding="{Binding BookmarkText}" Width="30" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Foreground" Value="Orange"/>
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Timestamp" Binding="{Binding Timestamp}" Width="150" />
+                <DataGridTextColumn Header="Level" Binding="{Binding Level}" Width="80" />
+                <DataGridTextColumn Header="Handler" Binding="{Binding Handler}" Width="300" />
+                <DataGridTextColumn Header="Message" Binding="{Binding Message}" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>
