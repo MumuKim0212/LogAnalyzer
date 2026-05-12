@@ -183,9 +183,32 @@ namespace LogAnalyzerWPF.Views
 
         public void StartRemote(RemoteConfig config)
         {
-            _remoteMonitor = new RemoteLogMonitor(config, 
-                onLogReceived: SafeAddLog, 
-                onError: errMsg => Dispatcher.Invoke(() => MessageBox.Show(errMsg, "Remote Error")));
+            _remoteMonitor = new RemoteLogMonitor(
+                config,
+                onLogReceived: SafeAddLog,
+                onError: errMsg => Dispatcher.Invoke(() =>
+                {
+                    // 오류도 그리드에 표시 + 팝업
+                    SafeAddLog(new LogEntry
+                    {
+                        Timestamp = DateTime.Now.ToString("HH:mm:ss"),
+                        Level = "ERROR",
+                        Handler = "Connection",
+                        Message = errMsg
+                    });
+                    MessageBox.Show(errMsg, "Remote Error");
+                }),
+                onStatus: statusMsg => Dispatcher.Invoke(() =>
+                {
+                    // 연결 진행 상황을 그리드에 INFO 항목으로 표시
+                    SafeAddLog(new LogEntry
+                    {
+                        Timestamp = DateTime.Now.ToString("HH:mm:ss"),
+                        Level = "INFO",
+                        Handler = "Connection",
+                        Message = statusMsg
+                    });
+                }));
             _remoteMonitor.Start();
         }
 
